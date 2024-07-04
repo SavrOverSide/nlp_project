@@ -1,1 +1,5 @@
-# nlp_project
+# The Team:
+- Savr
+- Sergey
+- Nikolay
+  
