@@ -7,7 +7,10 @@ from torch import nn
 from typing import Tuple
 import torch.nn.functional as F
 
-
+vocab_size = 3306
+embedding_dim = 64
+hidden_dim = 128
+output_dim = 1
 
 with open('utils/vocab2int.json', 'r') as f:
     vocab_to_int = json.load(f)
@@ -23,7 +26,7 @@ model = load_model()
 clf = LSTMConcatAttention()
 
 user_review = st.text_input(label='Оставьте свой отзыв здесь')
-classify = st.button('РАБОТАЙ, УМОЛЯЮ ТЕБЯ!!!')
+classify = st.button('Работай!!!')
 
 if user_review and classify:
     st.write(user_review)
@@ -34,7 +37,17 @@ if user_review and classify:
     )
     st.write(preprocessed_review.shape)
     st.write(preprocessed_review)
+
     with torch.inference_mode():
         out = clf(preprocessed_review.unsqueeze(0))
-    st.write(f'Вероятность позитивного отзыва высчитана и равна = {out}')
+        
+
+        
+        # Предположим, out возвращает (output, другие_значения)
+        output, _ = out  # Извлечение нужного значения из кортежа
+        probability = torch.sigmoid(output)
+        
+    st.write(f'Вероятность позитивного отзыва высчитана и равна = {probability.item()}')
+
+
 
